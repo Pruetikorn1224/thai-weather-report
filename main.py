@@ -151,7 +151,7 @@ if __name__ == "__main__":
  
     # Update title
     with open("README.md", "w", encoding="utf-8") as f:
-        f.write(f"# Thai Water Dashboard\วันที่อัพเดทล่าสุด: {timestamp.year}-{timestamp.month}-{timestamp.day}\n\n")
+        f.write(f"# Thai Water Report\วันที่อัพเดทล่าสุด: {timestamp.year}-{timestamp.month}-{timestamp.day}\n\n")
 
     # Dam
     dam_data = fetch_dam_data()
