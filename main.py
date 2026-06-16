@@ -123,6 +123,43 @@ def fetch_rainfall_data() -> pd.DataFrame:
     return filtered
 
 
+def fetch_weather_forecast(filepath: str = "README.md"):
+    """
+    Fetch weather forecast information from tmd.go.th
+    """
+    url = "https://tmd.go.th/forecast/daily"
+
+    response = requests.get(url, verify=False)
+    response.encoding = "utf-8"
+
+    tree = html.fromstring(response.content)
+    xpath = "//div[contains(., 'ลักษณะอากาศทั่วไป')]//p"
+
+    results = tree.xpath(xpath)
+
+    if results:
+        report = ""
+        for i in range(len(results)):
+            raw_text = results[i].text_content().strip()
+            clean_text = html_lib.unescape(raw_text).replace('\xa0', ' ')
+            if "ออกประกาศ" in clean_text:
+                raw_text = results[i+1].text_content().strip()
+                report = html_lib.unescape(raw_text).replace('\xa0', ' ')
+                break
+
+        with open(filepath, "a", encoding="utf-8") as f:
+            f.write(report + "\n\n")
+    
+    else:
+        with open(filepath, "a", encoding="utf-8") as f:
+            f.write("Unable to obtain the information\n\n")
+        
+    with open(filepath, "a", encoding="utf-8") as f:
+        f.write(f"Reference Link: {url}\n\n")
+
+    print("Successfully write down a weather forecast")
+
+
 def write_df_to_readme(df: pd.DataFrame, title: str = "", filepath: str = "README.md", mode: str = "w") -> None:
     """
     Convert a DataFrame to a Markdown table and write it to a .md file.
@@ -152,6 +189,9 @@ if __name__ == "__main__":
     # Update title
     with open("README.md", "w", encoding="utf-8") as f:
         f.write(f"# Thai Water Report\n\nวันที่อัพเดทล่าสุด: {timestamp.year}-{timestamp.month}-{timestamp.day}\n\n")
+
+    # Weather Forecast
+    fetch_weather_forecast()
 
     # Dam
     dam_data = fetch_dam_data()
