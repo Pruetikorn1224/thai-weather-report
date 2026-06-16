@@ -1,6 +1,8 @@
 import requests
 import warnings
 import pandas as pd
+from lxml import html
+import html as html_lib
 
 from datetime import datetime, timezone, timedelta
 
