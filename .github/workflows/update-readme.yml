@@ -2,7 +2,7 @@ name: Update Water Dashboard
 
 on:
   schedule:
-    - cron: '14 1 * * *'    # 8:14 AM UTC+7 (Bangkok) daily
+    - cron: '7 0 * * *'    # 8:14 AM UTC+7 (Bangkok) daily
   workflow_dispatch:          # Manual trigger button for testing
 
 jobs:
